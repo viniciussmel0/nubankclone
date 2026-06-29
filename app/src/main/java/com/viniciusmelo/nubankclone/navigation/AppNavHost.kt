@@ -25,6 +25,7 @@ import androidx.compose.material3.NavigationItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.red
 import androidx.core.graphics.toColor
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHost
 import androidx.navigation.compose.NavHost
@@ -47,6 +49,7 @@ import com.viniciusmelo.nubankclone.ui.screens.home.HomeScreen
 import com.viniciusmelo.nubankclone.ui.screens.invest.InvestScreen
 import com.viniciusmelo.nubankclone.ui.screens.phone.PhoneScreen
 import com.viniciusmelo.nubankclone.ui.screens.store.StoreScreen
+import com.viniciusmelo.nubankclone.ui.shared.BalanceViewModel
 import com.viniciusmelo.nubankclone.ui.theme.Black
 import com.viniciusmelo.nubankclone.ui.theme.DarkGray
 import com.viniciusmelo.nubankclone.ui.theme.Gray
@@ -71,6 +74,8 @@ fun AppNavHost() {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val balanceViewModel: BalanceViewModel = viewModel()
+    val balanceUiState by balanceViewModel.uiState.collectAsState()
 
     Scaffold(
         contentWindowInsets = WindowInsets(0),
@@ -140,10 +145,22 @@ fun AppNavHost() {
             navController = navController,
             startDestination = BottomNavItem.Home.route
         ) {
-            composable(BottomNavItem.Home.route) { HomeScreen() }
-            composable(BottomNavItem.Invest.route) { InvestScreen() }
-            composable(BottomNavItem.Store.route) { StoreScreen() }
-            composable(BottomNavItem.Phone.route) { PhoneScreen() }
+            composable(BottomNavItem.Home.route) {
+                HomeScreen(
+                    balanceViewModel = balanceViewModel
+                )
+            }
+            composable(BottomNavItem.Invest.route) {
+                InvestScreen(
+                    balanceViewModel = balanceViewModel
+                )
+            }
+            composable(BottomNavItem.Store.route) {
+                StoreScreen()
+            }
+            composable(BottomNavItem.Phone.route) {
+                PhoneScreen()
+            }
         }
     }
 }

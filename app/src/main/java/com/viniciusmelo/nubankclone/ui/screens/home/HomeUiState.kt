@@ -5,5 +5,6 @@ data class HomeUiState (
     val accountBalanceText: String = "",
     val isBalanceVisible: Boolean = true,
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val isFullBar: Boolean = true
 )

@@ -14,14 +14,7 @@ import kotlinx.coroutines.flow.update
 
 class HomeViewModel : ViewModel() {
 
-    val name = "Vinícius"
-    var balance: String = "1000,00"
-    var isBalanceVisible: Boolean = true
-
-    var userData: UserData = UserData(
-        userName = name,
-        accountBalance = balance
-    )
+    private val name = "Vinícius"
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -30,32 +23,11 @@ class HomeViewModel : ViewModel() {
         loadData()
     }
 
-    fun loadData() {
+    private fun loadData() {
         _uiState.update {
             it.copy(
                 helloUser = ("Olá, $name!"),
-                accountBalanceText = ("R$ $balance"),
-                isBalanceVisible = true
             )
-        }
-
-    }
-
-    fun toggleBalanceVisible() {
-        if (_uiState.value.isBalanceVisible) {
-            _uiState.update {
-                it.copy(
-                    accountBalanceText = "*****",  // ← troque aqui
-                    isBalanceVisible = false        // ← troque aqui
-                )
-            }
-        } else {
-            _uiState.update {
-                it.copy(
-                    accountBalanceText = "R$ $balance", // ← troque aqui
-                    isBalanceVisible = true              // ← troque aqui
-                )
-            }
         }
     }
 
